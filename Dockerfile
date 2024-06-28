@@ -8,4 +8,4 @@ RUN ./mvnw dependency:resolve
 
 COPY src ./src
 
-CMD ["./mvnw", "spring-boot:run"]
+ENTRYPOINT ["./mvnw", "spring-boot:run"]
