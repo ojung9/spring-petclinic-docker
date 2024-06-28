@@ -40,7 +40,7 @@ spec:
               hostPort: 8000
               protocol: TCP
             - containerPort: 8080
-              hostPort: 9090
+              hostPort: 8080
               protocol: TCP
           resources: {}
       restartPolicy: Always
