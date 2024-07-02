@@ -9,6 +9,7 @@ metadata:
     service.beta.kubernetes.io/aws-load-balancer-type: "external"  # AWS ALB 사용
     alb.ingress.kubernetes.io/scheme: internet-facing  # 인터넷에 접근 가능한 ALB 설정
     alb.ingress.kubernetes.io/target-type: ip  # ALB가 IP 주소를 대상으로 사용
+    alb.ingress.kubernetes.io/subnets: subnet-035d996e2bc02f907,subnet-003f433dead857928
   labels:
     io.kompose.service: petclinic
 spec:
