@@ -4,13 +4,13 @@ metadata:
   name: petclinic
   namespace: default
   annotations:
-    service.beta.kubernetes.io/aws-load-balancer-type: "external"  # AWS ALB 사용
-    alb.ingress.kubernetes.io/scheme: internet-facing  # 인터넷에 접근 가능한 ALB 설정
-    alb.ingress.kubernetes.io/subnets: "subnet-035d996e2bc02f907,subnet-003f433dead857928"  # 올바른 서브넷 ID 설정
+    service.beta.kubernetes.io/aws-load-balancer-type: "external"
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/subnets: "subnet-035d996e2bc02f907,subnet-003f433dead857928"
   labels:
     io.kompose.service: petclinic
 spec:
-  type: LoadBalancer  # 서비스 타입을 LoadBalancer로 설정
+  type: LoadBalancer
   ports:
     - name: "8000"
       port: 8000
