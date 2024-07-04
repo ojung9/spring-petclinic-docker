@@ -32,7 +32,7 @@ spec:
               value: jdbc:mysql://mysqlserver/petclinic
             - name: SERVER_PORT
               value: "8080"
-          image: 590184124193.dkr.ecr.ap-northeast-2.amazonaws.com/spring-petclinic-docker:1.7.1
+          image: 590184124193.dkr.ecr.ap-northeast-2.amazonaws.com/spring-petclinic-docker:1.6.3
           imagePullPolicy: IfNotPresent
           name: petclinic
           ports:
@@ -42,6 +42,18 @@ spec:
             - containerPort: 8080
               hostPort: 8080
               protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 20
           resources:
             requests:
               memory: "512Mi"
@@ -51,3 +63,4 @@ spec:
               cpu: "1000m"
       restartPolicy: Always
 status: {}
+
