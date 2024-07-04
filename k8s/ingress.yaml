@@ -22,10 +22,3 @@ spec:
               name: petclinic
               port:
                 number: 8080
-      - path: /8000
-        pathType: Prefix
-        backend:
-          service:
-              name: petclinic
-              port:
-                number: 8000
