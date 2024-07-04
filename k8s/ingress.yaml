@@ -15,14 +15,14 @@ spec:
   rules:
   - http:
       paths:
-      - path: /
+      - path: /8080
         pathType: Prefix
         backend:
           service:
               name: petclinic
               port:
                 number: 8080
-      - path: /
+      - path: /8000
         pathType: Prefix
         backend:
           service:
