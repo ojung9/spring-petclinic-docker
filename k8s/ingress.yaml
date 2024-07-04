@@ -9,7 +9,8 @@ metadata:
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/subnets: "subnet-035d996e2bc02f907,subnet-003f433dead857928"
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:590184124193:certificate/11e71ab8-bfb7-444a-bf87-2120f62dc299      
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:590184124193:certificate/11e71ab8-bfb7-444a-bf87-2120f62dc299
+    alb.ingress.kubernetes.io/ssl-redirect: '443'        
   labels:
     io.kompose.service: petclinic
 spec:
@@ -23,4 +24,10 @@ spec:
                 name: petclinic
                 port:
                   number: 8080
-
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: petclinic
+                port:
+                  number: 8000
