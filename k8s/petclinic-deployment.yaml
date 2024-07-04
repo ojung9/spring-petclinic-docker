@@ -32,7 +32,7 @@ spec:
               value: jdbc:mysql://mysqlserver/petclinic
             - name: SERVER_PORT
               value: "8080"
-          image: 590184124193.dkr.ecr.ap-northeast-2.amazonaws.com/spring-petclinic-docker:1.7.2
+          image: 590184124193.dkr.ecr.ap-northeast-2.amazonaws.com/spring-petclinic-docker:1.7.1
           imagePullPolicy: IfNotPresent
           name: petclinic
           ports:
@@ -45,19 +45,3 @@ spec:
           resources: {}
       restartPolicy: Always
 status: {}
-<<<<<<< HEAD
-=======
-      - name: petclinic
-        image: 590184124193.dkr.ecr.ap-northeast-2.amazonaws.com/spring-petclinic-docker:1.7.2
-        ports:
-        - containerPort: 8000
-        - containerPort: 8080
-        env:
-        - name: MYSQL_URL
-          value: jdbc:mysql://mysqlserver/petclinic
-        - name: SERVER_PORT
-          value: "8080"
-
->>>>>>> dc86720 (dsagwed)
-=======
->>>>>>> cf2672e (dgereqwe)
