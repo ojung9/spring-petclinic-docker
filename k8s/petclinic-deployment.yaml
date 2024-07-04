@@ -1,12 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: kompose convert -f docker-compose-k8s.yml
-    kompose.version: 1.31.2 (HEAD)
-  creationTimestamp: null
-  labels:
-    io.kompose.service: petclinic
   name: petclinic
   namespace: default
 spec:
@@ -14,19 +8,13 @@ spec:
   selector:
     matchLabels:
       io.kompose.service: petclinic
-  strategy:
-    type: Recreate
   template:
     metadata:
-      annotations:
-        kompose.cmd: kompose convert -f docker-compose-k8s.yml
-        kompose.version: 1.31.2 (HEAD)
-      creationTimestamp: null
       labels:
-        io.kompose.network/spring-petclinic-docker-default: "true"
         io.kompose.service: petclinic
     spec:
       containers:
+<<<<<<< HEAD
         - env:
             - name: MYSQL_URL
               value: jdbc:mysql://mysqlserver/petclinic
@@ -45,3 +33,16 @@ spec:
           resources: {}
       restartPolicy: Always
 status: {}
+=======
+      - name: petclinic
+        image: 590184124193.dkr.ecr.ap-northeast-2.amazonaws.com/spring-petclinic-docker:1.7.1
+        ports:
+        - containerPort: 8000
+        - containerPort: 8080
+        env:
+        - name: MYSQL_URL
+          value: jdbc:mysql://mysqlserver/petclinic
+        - name: SERVER_PORT
+          value: "8080"
+
+>>>>>>> dc86720 (dsagwed)
