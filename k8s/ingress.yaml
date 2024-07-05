@@ -11,21 +11,20 @@ metadata:
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:590184124193:certificate/11e71ab8-bfb7-444a-bf87-2120f62dc299
     alb.ingress.kubernetes.io/ssl-redirect: '443'
-    alb.ingress.kubernetes.io/healthcheck-path: '/health'      
   labels:
     io.kompose.service: petclinic
 spec:
   rules:
     - http:
         paths:
-          - path: /
+          - path: /8080
             pathType: Prefix
             backend:
               service:
                 name: petclinic
                 port:
                   number: 8080
-          - path: /
+          - path: /8000
             pathType: Prefix
             backend:
               service:
