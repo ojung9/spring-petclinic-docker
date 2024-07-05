@@ -65,6 +65,37 @@ pipeline {
             }
         }
 
+        stage('Update Git Repository') {
+            steps {
+                script {
+                    // Check if k8s/petclinic-deployment.yaml exists
+                    if (fileExists('k8s/petclinic-deployment.yaml')) {
+                        // Update the Kubernetes deployment file
+                        sh """
+                        sed -i 's#image: ${ECR_REGISTRY}/${ECR_REPOSITORY}:.*#image: ${ECR_REGISTRY}/${ECR_REPOSITORY}:${env.NEW_VERSION}#' k8s/petclinic-deployment.yaml
+                        """
+
+                        withCredentials([usernamePassword(credentialsId: 'github-creds', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                            sh 'git config --global user.email "ojung9@gmail.com"'
+                            sh 'git config --global user.name "ojugn9"'
+                            sh 'git pull origin ${BRANCH_NAME}'
+
+                            def changes = sh(script: 'git status --porcelain', returnStdout: true).trim()
+                            if (changes) {
+                                sh 'git add k8s/petclinic-deployment.yaml'
+                                sh "git commit -m 'Update deployment to version ${env.NEW_VERSION}'"
+                                sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/ojung9/spring-petclinic-docker.git ${BRANCH_NAME}"
+                            } else {
+                                echo "No changes to commit"
+                            }
+                        }
+                    } else {
+                        error "k8s/petclinic-deployment.yaml file not found"
+                    }
+                }
+            }
+        }
+
         stage('Docker Build & Push') {
             steps {
                 script {
@@ -79,38 +110,6 @@ pipeline {
 
                         // Push the Docker image with the new version tag
                         sh "docker push ${ECR_REGISTRY}/${ECR_REPOSITORY}:${env.NEW_VERSION}"
-
-                        // Check if k8s/petclinic-deployment.yaml exists
-                        if (fileExists('k8s/petclinic-deployment.yaml')) {
-                            // Update the Kubernetes deployment file without changing replicas
-                            sh """
-                            sed -i 's#image: ${ECR_REGISTRY}/${ECR_REPOSITORY}:.*#image: ${ECR_REGISTRY}/${ECR_REPOSITORY}:${env.NEW_VERSION}#' k8s/petclinic-deployment.yaml
-                            cat k8s/petclinic-deployment.yaml
-                            """
-                        } else {
-                            error "k8s/petclinic-deployment.yaml file not found"
-                        }
-                    }
-                }
-            }
-        }
-
-        stage('Commit and Push Changes to Git') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'github-creds', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
-                        sh 'git config --global user.email "ojung9@gmail.com"'
-                        sh 'git config --global user.name "ojugn9"'
-                        sh 'git pull origin ${BRANCH_NAME}'
-
-                        def changes = sh(script: 'git status --porcelain', returnStdout: true).trim()
-                        if (changes) {
-                            sh 'git add k8s/petclinic-deployment.yaml'
-                            sh "git commit -m 'Update deployment to version ${env.NEW_VERSION}'"
-                            sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/ojung9/spring-petclinic-docker.git ${BRANCH_NAME}"
-                        } else {
-                            echo "No changes to commit"
-                        }
                     }
                 }
             }
@@ -139,8 +138,7 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'Argo-creds', usernameVariable: 'ARGOCD_USERNAME', passwordVariable: 'ARGOCD_PASSWORD')]) {
                         sh '''
                         argocd login ${ARGOCD_SERVER} --username ${ARGOCD_USERNAME} --password ${ARGOCD_PASSWORD} --insecure --grpc-web
-                        argocd app sync ${ARGOCD_APP_NAME} --prune --force
-                        argocd app wait ${ARGOCD_APP_NAME} --sync
+                        argocd app sync ${ARGOCD_APP_NAME}
                         '''
                     }
                 }
