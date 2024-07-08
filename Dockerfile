@@ -8,7 +8,7 @@ COPY mvnw pom.xml ./
 COPY src ./src
 RUN ./mvnw clean package -DskipTests
 
-# Copy HTML files to the target directory (assuming target directory is /app)
+# Copy HTML files to the target directory
 COPY src/main/resources/templates /app/templates
 
 # Run the application
