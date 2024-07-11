@@ -31,16 +31,14 @@ spec:
             - name: MYSQL_URL
               value: jdbc:mysql://mysqlserver/petclinic
             - name: SERVER_PORT
-              value: "8080"
-          image: 590184124193.dkr.ecr.ap-northeast-2.amazonaws.com/spring-petclinic-docker:1.6.15
+              value: "8000"
+          image: 590184124193.dkr.ecr.ap-northeast-2.amazonaws.com/spring-petclinic-docker:1.7.8
           imagePullPolicy: Always
           name: petclinic
           ports:
             - containerPort: 8000
-              hostPort: 8000
               protocol: TCP
             - containerPort: 8080
-              hostPort: 8080
               protocol: TCP
           resources:
             requests:
@@ -49,5 +47,18 @@ spec:
             limits:
               memory: "1Gi"
               cpu: "1000m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 30
       restartPolicy: Always
 status: {}
+
